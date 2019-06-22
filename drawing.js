@@ -81,10 +81,52 @@
     };
 
     Drawing.prototype._touchEnd = function() {
+        console.log("Finalizei o desenho na posição");
+        var canvas = document.getElementById("draw-cell");
+        var img = canvas.toDataURL('image/jpg', 1.0);
+        //console.log(img);
+
+        // var script = document.createElement('script'); 
+        // script.src = '//code.jquery.com/jquery-1.11.0.min.js';
+        img_substr = img.substring(22).replace(/\//g, "|")
+        console.log(img_substr)
+        $.get("http://127.0.0.1:5000/"+img_substr, function(resultado){
+            console.log(resultado)
+        })
+
+        // var myHeaders = new Headers();        
+        // myHeaders.append('Access-Control-Allow-Origin', 'null')
+        // var myInit = {
+        //     method: 'GET',
+        //     headers: myHeaders,
+        //     cache: 'default'};
+
+        // const url = 'http://127.0.0.1:5000/1';
+        
+        // fetch(url, myInit)
+        //     .then(response => console.log(response.json()))
+        //     .catch(e => console.log("Can't access " + url + " response. " + e))
+
+        //savePicture(img);
         if (this.onChange) {
             this.onChange();
         }
     };
+
+    function savePicture(dataURL) {
+        try{
+            localStorage.setItem("elefant", dataURL);
+            console.log("Salvei");
+        } catch(e){
+            console.log("Storaged failed " + e);
+        }
+
+        // var a = document.createElement('a');
+        // a.href = dataURL;
+        // a.download = "imagem";
+        // a.click();
+        // a.remove();
+    }
 
     Drawing.prototype._draw = function() {
         this._clearCanvas();
