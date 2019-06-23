@@ -8,8 +8,6 @@ from keras.utils import to_categorical
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 import matplotlib.pyplot as plt
 from PIL import Image, ImageOps
-import cv2
-import PIL.ImageOps
 
 
 class Model(object):
@@ -101,9 +99,9 @@ class Model(object):
         gray_image = ImageOps.invert(gray_image)
         gray_image = gray_image.resize((28, 28), Image.ANTIALIAS)
         gray_image = np.asarray(gray_image, dtype='float32')
-        plt.imshow(gray_image, cmap='binary', interpolation='none')
-        plt.title("Exemplo do dataset")
-        plt.show()
+        # plt.imshow(gray_image, cmap='binary', interpolation='none')
+        # plt.title("Exemplo do dataset")
+        # plt.show()
         gray_image = np.expand_dims(gray_image, axis=0)
         gray_image = np.expand_dims(gray_image, axis=-1)
         gray_image = gray_image / 255
