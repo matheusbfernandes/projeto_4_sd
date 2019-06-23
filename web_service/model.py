@@ -99,9 +99,8 @@ class Model(object):
         background.paste(img, mask=img.split()[3])
         gray_image = background.convert('L')
         gray_image = ImageOps.invert(gray_image)
-        gray_image = gray_image.convert('1')
         gray_image = gray_image.resize((28, 28), Image.ANTIALIAS)
-        gray_image = np.asarray(gray_image)
+        gray_image = np.asarray(gray_image, dtype='float32')
         plt.imshow(gray_image, cmap='binary', interpolation='none')
         plt.title("Exemplo do dataset")
         plt.show()
@@ -111,6 +110,7 @@ class Model(object):
 
 
         # self.x_train, self.y_train, self.x_test, self.y_test = self._load_dataset()
+        # print(self.x_train[0])
         # plt.imshow(self.x_train[8], cmap='binary', interpolation='none')
         # plt.title("Exemplo do dataset")
         # plt.show()
