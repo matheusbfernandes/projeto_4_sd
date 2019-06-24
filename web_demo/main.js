@@ -54,6 +54,7 @@
 
     function clear() {
         drawing.reset();
+        document.getElementById("result").style.display = 'none'
         classifier.cancel();
         labeling.className = 'hidden';
     }
