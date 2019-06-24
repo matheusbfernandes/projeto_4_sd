@@ -1,12 +1,10 @@
 import numpy as np
-from keras import backend as k
 from keras.datasets import mnist
 from keras.models import Sequential, model_from_json
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.utils import to_categorical
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
-import matplotlib.pyplot as plt
 from PIL import Image, ImageOps
 
 
@@ -32,14 +30,9 @@ class Model(object):
     def _pre_processing_data(self):
         img_rows, img_cols = 28, 28
 
-        if k.image_data_format() == 'channels_first':
-            self.x_train = self.x_train.reshape(self.x_train.shape[0], 1, img_rows, img_cols)
-            self.x_test = self.x_test.reshape(self.x_test.shape[0], 1, img_rows, img_cols)
-            input_shape = (1, img_rows, img_cols)
-        else:
-            self.x_train = self.x_train.reshape(self.x_train.shape[0], img_rows, img_cols, 1)
-            self.x_test = self.x_test.reshape(self.x_test.shape[0], img_rows, img_cols, 1)
-            input_shape = (img_rows, img_cols, 1)
+        self.x_train = self.x_train.reshape(self.x_train.shape[0], img_rows, img_cols, 1)
+        self.x_test = self.x_test.reshape(self.x_test.shape[0], img_rows, img_cols, 1)
+        input_shape = (img_rows, img_cols, 1)
 
         self.x_train = self.x_train.astype('float32')
         self.x_test = self.x_test.astype('float32')
@@ -84,11 +77,13 @@ class Model(object):
             self.model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
 
         score = self.model.evaluate(self.x_train, self.y_train, verbose=0)
-        print('Train loss:', score[0])
-        print('Train accuracy:', score[1])
+        print("using the MNIST Dataset")
+        print("Train loss:", score[0])
+        print("Train accuracy:", score[1])
+        print("-----------------------")
         score = self.model.evaluate(self.x_test, self.y_test, verbose=0)
-        print('Test loss:', score[0])
-        print('Test accuracy:', score[1])
+        print("Test loss:", score[0])
+        print("Test accuracy:", score[1])
 
     def inference(self):
         img = Image.open("imageToSave.png")
@@ -99,21 +94,9 @@ class Model(object):
         gray_image = ImageOps.invert(gray_image)
         gray_image = gray_image.resize((28, 28), Image.ANTIALIAS)
         gray_image = np.asarray(gray_image, dtype='float32')
-        # plt.imshow(gray_image, cmap='binary', interpolation='none')
-        # plt.title("Exemplo do dataset")
-        # plt.show()
         gray_image = np.expand_dims(gray_image, axis=0)
         gray_image = np.expand_dims(gray_image, axis=-1)
         gray_image = gray_image / 255
-
-
-        # self.x_train, self.y_train, self.x_test, self.y_test = self._load_dataset()
-        # print(self.x_train[0])
-        # plt.imshow(self.x_train[8], cmap='binary', interpolation='none')
-        # plt.title("Exemplo do dataset")
-        # plt.show()
-        # self._pre_processing_data()
-        # test = np.expand_dims(self.x_test[0], axis=0)
 
         return np.argmax(self.model.predict(gray_image))
 
