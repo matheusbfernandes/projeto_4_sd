@@ -5,3 +5,4 @@ pillow
 flask==1.0.3
 flask-cors
 flask-restful
+matplotlib
