@@ -18,12 +18,13 @@ class Communicator(Resource):
         img_data = img.encode('utf-8')
         
         with open("imageToSave.png", "wb") as fh:
-            #fh.write(base64.decodebytes(img_data))
+            # fh.write(base64.decodebytes(img_data))
             fh.write(base64.b64decode(img_data))
 
         model = Model()
         num = model.inference()
-        return {'img': num}
+        print(num)
+        return {'img': 'ok'}
 
 
 api.add_resource(Communicator, '/<string:img>')
@@ -34,5 +35,5 @@ if __name__ == '__main__':
     '''
     Se trocar o IP, lembra de trocar tbm na linha 90 do drawing.js
     '''
-    app.run('192.168.1.60',debug=True)
+    app.run('192.168.1.60', debug=True)
 

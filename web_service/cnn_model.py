@@ -1,4 +1,5 @@
 import numpy as np
+import keras.backend as K
 from keras.datasets import mnist
 from keras.models import Sequential, model_from_json
 from keras.losses import categorical_crossentropy
@@ -98,7 +99,10 @@ class Model(object):
         gray_image = np.expand_dims(gray_image, axis=-1)
         gray_image = gray_image / 255
 
-        return np.argmax(self.model.predict(gray_image))
+        predicted_value = np.argmax(self.model.predict(gray_image))
+        K.clear_session()
+
+        return predicted_value
 
 
 def main():
