@@ -19,9 +19,9 @@ class Model(object):
             self.model = self._new_model(128, 10)
             self.compute_accuracy()
         else:
-            with open('saved_model.json', 'r') as f:
+            with open('saved_weights/saved_model.json', 'r') as f:
                 self.model = model_from_json(f.read())
-            self.model.load_weights('model_weights.h5')
+            self.model.load_weights('saved_weights/model_weights.h5')
 
     @staticmethod
     def _load_dataset():
@@ -87,7 +87,7 @@ class Model(object):
         print("Test accuracy:", score[1])
 
     def inference(self):
-        img = Image.open("imageToSave.png")
+        img = Image.open("images/savedImage.png")
         img.load()
         background = Image.new("RGB", img.size, (255, 255, 255))
         background.paste(img, mask=img.split()[3])

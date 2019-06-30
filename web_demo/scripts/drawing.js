@@ -1,8 +1,5 @@
 (function() {
-
     var THICKNESS = 0.1;
-    var SAMPLE_SIZE = 28;
-    var SAMPLE_BOUNDING_SIZE = 20;
 
     function Drawing() {
         this.onChange = null;
@@ -32,43 +29,6 @@
         this._draw();
     };
 
-    Drawing.prototype.mnistIntensities = function() {
-        this._draw();
-        var bmp = new window.app.Bitmap(this._canvas);
-        var center = bmp.centerOfMass();
-        var used = bmp.usedBounds();
-
-        if (used.width > used.height) {
-            used.y -= (used.width - used.height) / 2;
-            used.height = used.width;
-        } else {
-            used.x -= (used.height - used.width) / 2;
-            used.width = used.height;
-        }
-
-        var margin = (SAMPLE_SIZE - SAMPLE_BOUNDING_SIZE) / 2;
-        var offsetX = center.x - (used.x + used.width/2);
-        var offsetY = center.y - (used.y + used.height/2);
-
-        var offsetScaler = SAMPLE_BOUNDING_SIZE / used.width;
-        offsetX *= offsetScaler;
-        offsetY *= offsetScaler;
-
-        var scaled = document.createElement('canvas');
-        scaled.width = SAMPLE_SIZE;
-        scaled.height = SAMPLE_SIZE;
-        var ctx = scaled.getContext('2d');
-        ctx.drawImage(this._canvas, used.x, used.y, used.width, used.height,
-            margin-offsetX, margin-offsetY, SAMPLE_BOUNDING_SIZE,
-            SAMPLE_BOUNDING_SIZE);
-
-        var res = new window.app.Bitmap(scaled).alphaData();
-        for (var i = 0, len = res.length; i < len; ++i) {
-            res[i] /= 255;
-        }
-        return res;
-    };
-
     Drawing.prototype._touchStart = function(pos) {
         this._currentPath = [pos];
         this._drawnPaths.push(this._currentPath);
@@ -84,15 +44,13 @@
         console.log("Finalizei o desenho na posição");
         var canvas = document.getElementById("draw-cell");
         var img = canvas.toDataURL('image/jpg', 1.0);
-        
-        img_substr = img.substring(22).replace(/\//g, "|")
-        console.log(img_substr)
-        $.get("http://192.168.1.60:5000/"+img_substr, function(resultado){
-            document.getElementById("result").value = resultado.img
-            document.getElementById("result").style.display = 'inline-block'
-            console.log(resultado)
-        })
-        
+
+        var img_substr = img.substring(22).replace(/\//g, "|");
+
+        $.get("http://192.168.0.100:5000/"+img_substr, function(resultado){
+            document.getElementById("result").value = resultado.img;
+            document.getElementById("result").style.display = 'inline-block';
+        });
 
         if (this.onChange) {
             this.onChange();
@@ -114,8 +72,7 @@
     Drawing.prototype._drawPath = function(p) {
         var ctx = this._canvas.getContext('2d');
         ctx.save();
-        ctx.scale(this._canvas.width/this._canvas.offsetWidth,
-            this._canvas.height/this._canvas.offsetHeight);
+        ctx.scale(this._canvas.width/this._canvas.offsetWidth, this._canvas.height/this._canvas.offsetHeight);
 
         ctx.fillStyle = 'black';
         ctx.lineJoin = 'round';
@@ -135,7 +92,6 @@
             }
             ctx.stroke();
         }
-
         ctx.restore();
     };
 
@@ -185,5 +141,4 @@
     };
 
     window.app.Drawing = Drawing;
-
 })();
