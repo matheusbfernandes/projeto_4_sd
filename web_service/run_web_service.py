@@ -26,7 +26,6 @@ class Communicator(Resource):
         return {'img': int(num)}
 
 
-
 api.add_resource(Communicator, '/<string:img>')
 
 
@@ -35,4 +34,3 @@ if __name__ == '__main__':
     Se trocar o IP, lembra de trocar tbm na linha 50 do drawing.js
     '''
     app.run('192.168.0.100', debug=False)
-

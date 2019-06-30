@@ -1,5 +1,5 @@
 import numpy as np
-import keras.backend as K
+import keras.backend as k
 from keras.datasets import mnist
 from keras.models import Sequential, model_from_json
 from keras.losses import categorical_crossentropy
@@ -66,7 +66,8 @@ class Model(object):
 
         new_model = self._initialize_model(input_shape, num_classes)
         new_model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
-        new_model.fit(self.x_train, self.y_train, batch_size=batch_size, epochs=num_epoch, verbose=1, validation_data=(self.x_test, self.y_test))
+        new_model.fit(self.x_train, self.y_train, batch_size=batch_size, epochs=num_epoch, verbose=1,
+                      validation_data=(self.x_test, self.y_test))
 
         return new_model
 
@@ -100,7 +101,7 @@ class Model(object):
         gray_image = gray_image / 255
 
         predicted_value = np.argmax(self.model.predict(gray_image))
-        K.clear_session()
+        k.clear_session()
 
         return predicted_value
 
