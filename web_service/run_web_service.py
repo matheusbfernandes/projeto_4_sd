@@ -26,6 +26,7 @@ class Communicator(Resource):
         return {'img': int(num)}
 
 
+
 api.add_resource(Communicator, '/<string:img>')
 
 
